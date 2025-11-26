@@ -1,0 +1,30 @@
+<div class="clock">
+    <span id="clock-tiie"></span>
+</div>
+
+<script>
+(function () {
+    const timer = document.getElementById('clock-tiie');
+
+    function update() {
+        timer.textContent = new Date().toLocaleTimeString('cs-CZ');
+    }
+
+    update();
+    setInterval(update, 1000);
+})();
+</script>
+
+<style>
+.clock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#clock-tiie {
+    font-size: 48px;
+    color: #bf1d89;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+
