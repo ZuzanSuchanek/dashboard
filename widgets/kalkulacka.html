@@ -1,0 +1,88 @@
+<div class="simple-calc">
+    <input type="text" id="calc-input">
+
+    <button onclick="calcAppend('7')">7</button>
+    <button onclick="calcAppend('8')">8</button>
+    <button onclick="calcAppend('9')">9</button>
+    <button onclick="calcAppend('/')">/</button>
+
+    <button onclick="calcAppend('4')">4</button>
+    <button onclick="calcAppend('5')">5</button>
+    <button onclick="calcAppend('6')">6</button>
+    <button onclick="calcAppend('*')">*</button>
+
+    <button onclick="calcAppend('1')">1</button>
+    <button onclick="calcAppend('2')">2</button>
+    <button onclick="calcAppend('3')">3</button>
+    <button onclick="calcAppend('-')">-</button>
+
+    <button onclick="calcAppend('0')">0</button>
+    <button onclick="calcAppend('.')">.</button>
+    <button onclick="calcResult()">=</button>
+    <button onclick="calcAppend('+')">+</button>
+
+    <button onclick="calcClear()" class="clear">C</button>
+</div>
+
+<script>
+window.calcAppend = function(val) {
+    document.getElementById('calc-input').value += val;
+}
+
+window.calcResult = function() {
+    try {
+        const input = document.getElementById('calc-input');
+        input.value = eval(input.value);
+    } catch (e) {
+        alert('Chyba');
+    }
+}
+
+window.calcClear = function() {
+    document.getElementById('calc-input').value = '';
+}
+</script>
+
+<style>
+.simple-calc {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    max-width: 220px;
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Displej */
+#calc-input {
+    grid-column: span 4;
+    text-align: right;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #aaa;
+    background: white;
+    outline: none;
+}
+
+/* Všechna tlačítka */
+button {
+    padding: 10px;
+    font-size: 16px;
+    background: #eaeaea;
+    border: 1px solid #aaa;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #ddd;
+}
+
+/* Tlačítko C přes celou šířku */
+.clear {
+    grid-column: span 4;
+    background: white;
+    font-weight: bold;
+}
+</style>
