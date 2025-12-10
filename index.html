@@ -21,6 +21,7 @@
       { name: 'weather', width: 'full' },
       { name: 'kalkulacka', width: 'full' },
       { name: 'todo', width: 'full' },
+      { name: 'hodiny', width: 'full' },
 
       
     ];
@@ -61,3 +62,96 @@
   </script>
 </body>
 </html>
+
+<style>
+  /* vrstva pro animace */
+  .funny-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: -1;
+  }
+
+  body {
+    background: #ffb3d9;
+    margin: 0;
+  }
+  .full-bg {
+    position: fixed;
+    inset: 0; /* top 0, right 0, bottom 0, left 0 */
+    background-image: url("https://i.redd.it/jeff-the-killer-creepypasta-has-a-legitimately-creepy-v0-86t77n481gsc1.jpg?width=1026&format=pjpg&auto=webp&s=32dcd7fafe1348e47772c83e4e5f64106c482883");
+    background-size: cover; /* roztáhne přes celou stránku */
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.2; /* 0.2 = 20 % viditelnost → 80 % průhlednost */
+    z-index: -1; /* aby byl pod dashboardem */
+    pointer-events: none; /* neblokuje klikání/scroll */
+  }
+
+  /* srdíčka */
+  .heart {
+    position: absolute;
+    top: -50px;
+    color: #ff69b4;
+    font-size: 30px;
+    animation: fall 5s linear infinite;
+  }
+
+  /* třpytky */
+  .sparkle {
+    position: absolute;
+    top: -20px;
+    color: #ffffffaa;
+    font-size: 15px;
+    animation: fall 6s linear infinite;
+  }
+
+  /* hvězdičky */
+  .star {
+    position: absolute;
+    top: -50px;
+    color: #ffe066;
+    font-size: 25px;
+    animation: spinfall 7s linear infinite;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  @keyframes spinfall {
+    0% { transform: translateY(-50px) rotate(0deg); }
+    100% { transform: translateY(110vh) rotate(720deg); }
+  }
+</style>
+
+<div class="funny-bg" id="funny-bg"></div>
+
+<script>
+  const bg = document.getElementById("funny-bg");
+
+  function spawn(className, symbol, count, sizeMin, sizeMax, speedMin, speedMax) {
+    for (let i = 0; i < count; i++) {
+      let el = document.createElement("div");
+      el.className = className;
+      el.innerText = symbol;
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.animationDuration = speedMin + Math.random() * speedMax + "s";
+      el.style.fontSize = (sizeMin + Math.random() * sizeMax) + "px";
+      bg.appendChild(el);
+    }
+  }
+
+  // 🎀 30 srdíček
+  spawn("heart", "💗", 30, 20, 40, 3, 5);
+
+  // ✨ 40 třpytek
+  spawn("sparkle", "✨", 40, 10, 20, 3, 4);
+
+  // ⭐ 20 hvězdiček
+  spawn("star", "⭐", 20, 20, 35, 4, 6);
+</script>
+
+<div class="full-bg"></div>
