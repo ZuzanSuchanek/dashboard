@@ -35,7 +35,8 @@ body {
 
 /* Grid systém pro šířku widgetů */
 .widget.full {
-  grid-column: 1 / -1; /* Celá šířka - 12 sloupců */
+  grid-column: 1 / -1;
+  opacity: 50%; /* Celá šířka - 12 sloupců */
 }
 
 .widget.half {
