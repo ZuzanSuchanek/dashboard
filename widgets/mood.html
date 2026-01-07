@@ -1,0 +1,172 @@
+<!-- EMBED SAFE MOOD TRACKER WIDGET -->
+<div class="mood-widget">
+  <h2>Jak se dnes cítíš?</h2>
+
+  <div class="date-select">
+    <input type="date" class="mood-date" />
+  </div>
+
+  <div class="moods">
+    <span class="mood" data-mood="😄">😄</span>
+    <span class="mood" data-mood="🙂">🙂</span>
+    <span class="mood" data-mood="😐">😐</span>
+    <span class="mood" data-mood="😕">😕</span>
+    <span class="mood" data-mood="😡">😡</span>
+  </div>
+
+  <button class="confirm" disabled>Potvrdit</button>
+
+  <div class="history"></div>
+</div>
+
+<style>
+/* === MOOD TRACKER (scoped, index-safe) === */
+.mood-widget {
+  background: #151821;
+  border: 1px solid #222635;
+  border-radius: 12px;
+  padding: 16px;
+  width: 100%;
+  max-width: 320px;
+  color: #e5e7eb;
+  font-family: inherit;
+}
+
+.mood-widget h2 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.mood-widget .moods {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.mood-widget .mood {
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+.mood-widget .mood:hover { transform: scale(1.15); opacity: 1; }
+.mood-widget .mood.selected { opacity: 1; }
+.mood-widget .mood.locked { cursor: not-allowed; opacity: 0.25; }
+
+.mood-widget .confirm {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 6px;
+  background: #0f1115;
+  border: 1px solid #222635;
+  color: #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.mood-widget .confirm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.mood-widget input[type="date"] {
+  background: #0f1115;
+  color: #e5e7eb;
+  border: 1px solid #222635;
+  border-radius: 6px;
+  padding: 5px;
+  margin-bottom: 8px;
+}
+
+.mood-widget .history {
+  border-top: 1px solid #222635;
+  padding-top: 8px;
+  font-size: 0.85rem;
+}
+
+.mood-widget .history-item {
+  display: flex;
+  justify-content: space-between;
+  opacity: 0.75;
+}
+</style>
+
+<script>
+(() => {
+  const w = document.querySelector('.mood-widget');
+  if (!w) return;
+
+  const dateInput = w.querySelector('.mood-date');
+  const moods = w.querySelectorAll('.mood');
+  const historyEl = w.querySelector('.history');
+  const confirmBtn = w.querySelector('.confirm');
+
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.value = today;
+
+  let pendingMood = null;
+
+  const getData = () => JSON.parse(localStorage.getItem('moodData') || '{}');
+  const saveData = d => localStorage.setItem('moodData', JSON.stringify(d));
+
+  const lockIfExists = date => {
+    const data = getData();
+    const locked = !!data[date];
+    moods.forEach(m => m.classList.toggle('locked', locked));
+    confirmBtn.disabled = locked || !pendingMood;
+  };
+
+  moods.forEach(m => {
+    m.addEventListener('click', () => {
+      if (m.classList.contains('locked')) return;
+      pendingMood = m.dataset.mood;
+      moods.forEach(x => x.classList.remove('selected'));
+      m.classList.add('selected');
+      confirmBtn.disabled = false;
+    });
+  });
+
+  confirmBtn.addEventListener('click', () => {
+    const date = dateInput.value;
+    if (!pendingMood) return;
+
+    const data = getData();
+    if (data[date]) return; // pouze jednou za den
+
+    data[date] = pendingMood;
+    saveData(data);
+    pendingMood = null;
+    lockIfExists(date);
+    renderHistory();
+  });
+
+  dateInput.addEventListener('change', () => {
+    pendingMood = null;
+    moods.forEach(m => m.classList.remove('selected'));
+    lockIfExists(dateInput.value);
+  });
+
+  const renderHistory = () => {
+    const data = getData();
+    historyEl.innerHTML = '';
+
+    for (let i = 0; i < 7; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const key = d.toISOString().split('T')[0];
+      if (!data[key]) continue;
+
+      const row = document.createElement('div');
+      row.className = 'history-item';
+      row.innerHTML = `<span>${key}</span><span>${data[key]}</span>`;
+      historyEl.appendChild(row);
+    }
+  };
+
+  lockIfExists(today);
+  renderHistory();
+})();
+</script>
