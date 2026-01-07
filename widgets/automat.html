@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dark Fantasy Casino Slot</title>
+
+  /* ===================== CSS – TEMNÝ CHRÁM ===================== */
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, #2a0000, #000);
+      font-family: 'Cinzel', serif;
+      overflow: hidden;
+      color: #fca5a5;
+    }
+
+    .slot-machine {
+      position: relative;
+      padding: 40px;
+      border-radius: 24px;
+      background: linear-gradient(145deg, #200000, #000);
+      border: 6px solid #7f1d1d;
+      box-shadow: 0 0 80px rgba(120,0,0,0.6);
+    }
+
+    .reels {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .reel {
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      background: #000;
+      border-radius: 16px;
+      border: 4px solid #450a0a;
+      box-shadow: inset 0 0 20px #000;
+      transition: transform 0.2s;
+    }
+
+    .spin {
+      padding: 16px 32px;
+      font-size: 20px;
+      letter-spacing: 2px;
+      background: #450a0a;
+      border: 2px solid #7f1d1d;
+      color: #fecaca;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .spin:hover { background: #7f1d1d; }
+
+    .lever {
+      position: absolute;
+      right: -60px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 160px;
+      background: linear-gradient(to bottom, #7f1d1d, #300);
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .lever::after {
+      content: "";
+      position: absolute;
+      top: -25px;
+      left: -10px;
+      width: 50px;
+      height: 50px;
+      background: #991b1b;
+      border-radius: 50%;
+      border: 4px solid #300;
+    }
+
+    .win-screen {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .win-screen.active { display: flex; }
+
+    .win-text {
+      font-size: 72px;
+      color: #dc2626;
+      text-shadow: 0 0 40px #7f1d1d;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== HTML ===================== -->
+  <div class="slot-machine">
+    <div class="reels">
+      <div class="reel" id="r1">🩸</div>
+      <div class="reel" id="r2">🩸</div>
+      <div class="reel" id="r3">🩸</div>
+    </div>
+    <button class="spin" id="spinBtn">INVOKE FATE</button>
+    <div class="lever" id="lever"></div>
+  </div>
+
+  <div class="win-screen" id="winScreen">
+    <div class="win-text">🩸 FATE BENDS 🩸</div>
+  </div>
+
+  <!-- ===================== JAVASCRIPT ===================== -->
+  <script>
+    const symbols = ["🩸","💀","👁️","🔥","👑","🜏"];
+    const reels = [r1, r2, r3];
+    const winScreen = document.getElementById('winScreen');
+
+    function spin() {
+      reels.forEach((reel, i) => {
+        reel.style.transform = 'translateY(-20px)';
+        setTimeout(() => {
+          const sym = symbols[Math.floor(Math.random() * symbols.length)];
+          reel.textContent = sym;
+          reel.style.transform = 'translateY(0)';
+        }, 200 + i * 150);
+      });
+
+      setTimeout(() => {
+        if (reels.every(r => r.textContent === reels[0].textContent)) {
+          winScreen.classList.add('active');
+          setTimeout(() => winScreen.classList.remove('active'), 2500);
+        }
+      }, 900);
+    }
+
+    spinBtn.onclick = spin;
+    lever.onclick = spin;
+  </script>
+
+</body>
+</html>

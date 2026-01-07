@@ -2,17 +2,202 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
-  <title>Osobní dashboard</title>
+  <title>Osobní Dark Fantasy Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ==================== ZÁKLAD ==================== */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: auto;
+      overflow-y: auto;
+      font-family: 'Cinzel', serif;
+      background: #050505;
+      color: #eee;
+    }
+
+    /* ==================== DASHBOARD ==================== */
+    #dashboard {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      z-index: 1;
+    }
+
+    .widget {
+      background: linear-gradient(145deg, #1a0000, #000);
+      border: 4px solid #7f1d1d;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 0 50px rgba(127,29,29,0.7);
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .widget:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 60px rgba(180,20,20,0.8);
+    }
+
+    .full, .half, .third { width: 100%; }
+
+    /* ==================== DARK FANTASY ANIMACE ==================== */
+    .funny-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .ember, .smoke, .shadow, .crows {
+      position: absolute;
+      top: -50px;
+      font-size: 20px;
+      animation-timing-function: linear;
+    }
+
+    .ember { color: #ff4500; animation: fall 5s linear infinite; }
+    .smoke { color: #555555aa; animation: fall 7s linear infinite; }
+    .shadow { color: #660000; animation: spinfall 9s linear infinite; }
+    .crows { color: #111111; animation: spinfall 12s linear infinite; font-size: 24px; }
+
+    @keyframes fall {
+      0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes spinfall {
+      0% { transform: translateY(-50px) rotate(0deg); }
+      100% { transform: translateY(110vh) rotate(720deg); }
+    }
+
+    /* ==================== FULL BACKGROUND ==================== */
+    .full-bg {
+      position: fixed;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1601758123927-7a9b004b3f9c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhfDE3fHxkYXJrJTIwZmFudGFzeXxlbnwwfHx8fDE2OTM0OTc0NzI&ixlib=rb-4.0.3&q=80&w=1080');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.15;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    /* ==================== SLOT MACHINE WIDGET ==================== */
+    .slot-machine {
+      position: relative;
+      padding: 50px;
+      border-radius: 24px;
+      background: linear-gradient(145deg, #200000, #000);
+      border: 6px solid #7f1d1d;
+      box-shadow: 0 0 100px rgba(120,0,0,0.7);
+    }
+
+    .reels {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .reel {
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      background: #000;
+      border-radius: 16px;
+      border: 4px solid #450a0a;
+      box-shadow: inset 0 0 20px #000;
+      transition: transform 0.2s;
+    }
+
+    .spin {
+      padding: 16px 36px;
+      font-size: 22px;
+      letter-spacing: 2px;
+      background: #450a0a;
+      border: 2px solid #7f1d1d;
+      color: #fecaca;
+      border-radius: 12px;
+      cursor: pointer;
+      text-shadow: 0 0 10px #000;
+    }
+
+    .spin:hover { background: #7f1d1d; }
+
+    /* Páčka */
+    .lever {
+      position: absolute;
+      right: -60px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 160px;
+      background: linear-gradient(to bottom, #7f1d1d, #300);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .lever::after {
+      content: '';
+      position: absolute;
+      top: -25px;
+      left: -10px;
+      width: 50px;
+      height: 50px;
+      background: #991b1b;
+      border-radius: 50%;
+      border: 4px solid #300;
+    }
+
+    .lever.active {
+      transform: translateY(-50%) rotate(25deg);
+    }
+
+    /* Výhra */
+    .win-screen {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .win-screen.active { display: flex; }
+
+    .win-text {
+      font-size: 72px;
+      color: #dc2626;
+      text-shadow: 0 0 60px #7f1d1d;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
-  <main id="dashboard" class="grid"></main>
+
+  <div class="full-bg"></div>
+  <div class="funny-bg" id="funny-bg"></div>
+  <main id="dashboard"></main>
 
   <script>
-    // seznam widgetů, které chceme načíst
-    // každý widget může mít konfiguraci: { name: 'název', width: 'full'|'half'|'third' }
-    // nebo jednoduše string pro výchozí šířku
+    /* ==================== WIDGET LOADER ==================== */
     const widgets = [
       { name: 'ahoj', width: 'full' },
       { name: 'header', width: 'full' },
@@ -22,34 +207,21 @@
       { name: 'kalkulacka', width: 'full' },
       { name: 'todo', width: 'full' },
       { name: 'hodiny', width: 'full' },
-
-      
+      { name: 'automat', width: 'half' },
     ];
 
     async function loadWidgets() {
       const container = document.getElementById('dashboard');
       for (const widgetConfig of widgets) {
-        // podpora pro string i objekt
         const widgetName = widgetConfig.name;
         const widgetWidth = widgetConfig.width;
-        
-        // načíst widget
         const res = await fetch(`widgets/${widgetName}.html`);
         const html = await res.text();
-
-        // vytvořit wrapper pro widget
         const widgetWrapper = document.createElement('div');
         widgetWrapper.className = 'widget';
-        
-        // přidat třídu pro šířku, pokud je specifikována
-        if (widgetWidth) {
-          widgetWrapper.classList.add(widgetWidth);
-        }
-        
+        if(widgetWidth) widgetWrapper.classList.add(widgetWidth);
         widgetWrapper.innerHTML = html;
         container.appendChild(widgetWrapper);
-        
-        // spustit skripty z widgetu
         const scripts = widgetWrapper.querySelectorAll('script');
         scripts.forEach(oldScript => {
           const newScript = document.createElement('script');
@@ -59,99 +231,68 @@
       }
     }
     loadWidgets();
+
+    /* ==================== FUNNY-BG ANIMACE ==================== */
+    const bg = document.getElementById('funny-bg');
+    function spawn(className, symbol, count, sizeMin, sizeMax, speedMin, speedMax) {
+      for(let i=0;i<count;i++){
+        let el = document.createElement('div');
+        el.className = className;
+        el.innerText = symbol;
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.animationDuration = speedMin + Math.random() * speedMax + 's';
+        el.style.fontSize = (sizeMin + Math.random() * sizeMax) + 'px';
+        bg.appendChild(el);
+      }
+    }
+    spawn('ember', '🔥', 50, 15, 35, 3, 6);
+    spawn('smoke', '☁️', 40, 20, 40, 5, 8);
+    spawn('shadow', '👁️', 35, 20, 40, 6, 10);
+    spawn('crows', '🦅', 25, 20, 40, 8, 14);
+
+    /* ==================== SLOT PAČKA + ZVUKY ==================== */
+    function setupLever() {
+      const lever = document.querySelector('.lever');
+      const reels = document.querySelectorAll('.reel');
+      const winScreen = document.querySelector('.win-screen');
+      const winText = document.querySelector('.win-text');
+
+      if(!lever || reels.length === 0) return;
+
+      const leverSound = new Audio('https://www.soundjay.com/mechanical/sounds/mechanical-pull-1.mp3');
+      const winSound = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-01.mp3');
+
+      lever.addEventListener('click', () => {
+        lever.classList.add('active');
+        leverSound.play();
+
+        // animace slotu
+        reels.forEach((reel, i) => {
+          let symbols = ['🍒','🍋','🍇','🔔','💀'];
+          let result = symbols[Math.floor(Math.random()*symbols.length)];
+          setTimeout(() => { reel.textContent = result; }, i*200);
+        });
+
+        // odblokovat páčku po 0.5s
+        setTimeout(()=>{ lever.classList.remove('active'); },500);
+
+        // jednoduché vyhodnocení výhry
+        setTimeout(()=>{
+          let values = Array.from(reels).map(r => r.textContent);
+          if(values.every(v=>v===values[0])){
+            winScreen.classList.add('active');
+            winSound.play();
+            setTimeout(()=>{ winScreen.classList.remove('active'); }, 3000);
+          }
+        }, 600);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', setupLever);
   </script>
+
+  <!-- Výhra overlay -->
+  <div class="win-screen"><div class="win-text">VYHRÁL JSI!</div></div>
+
 </body>
 </html>
-
-<style>
-  /* vrstva pro animace */
-  .funny-bg {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: -1;
-  }
-
-  body {
-    background: #ffb3d9;
-    margin: 0;
-  }
-  .full-bg {
-    position: fixed;
-    inset: 0; /* top 0, right 0, bottom 0, left 0 */
-    background-image: url("https://media1.tenor.com/m/u4v71kVJqu0AAAAd/dr-house-dr-gregory-house.gif");
-    background-size: cover; /* roztáhne přes celou stránku */
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0.2; /* 0.2 = 20 % viditelnost → 80 % průhlednost */
-    z-index: -1; /* aby byl pod dashboardem */
-    pointer-events: none; /* neblokuje klikání/scroll */
-  }
-
-  /* srdíčka */
-  .heart {
-    position: absolute;
-    top: -50px;
-    color: #ff69b4;
-    font-size: 30px;
-    animation: fall 5s linear infinite;
-  }
-
-  /* třpytky */
-  .sparkle {
-    position: absolute;
-    top: -20px;
-    color: #ffffffaa;
-    font-size: 15px;
-    animation: fall 6s linear infinite;
-  }
-
-  /* hvězdičky */
-  .star {
-    position: absolute;
-    top: -50px;
-    color: #ffe066;
-    font-size: 25px;
-    animation: spinfall 7s linear infinite;
-  }
-
-  @keyframes fall {
-    0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-  }
-
-  @keyframes spinfall {
-    0% { transform: translateY(-50px) rotate(0deg); }
-    100% { transform: translateY(110vh) rotate(720deg); }
-  }
-</style>
-
-<div class="funny-bg" id="funny-bg"></div>
-
-<script>
-  const bg = document.getElementById("funny-bg");
-
-  function spawn(className, symbol, count, sizeMin, sizeMax, speedMin, speedMax) {
-    for (let i = 0; i < count; i++) {
-      let el = document.createElement("div");
-      el.className = className;
-      el.innerText = symbol;
-      el.style.left = Math.random() * 100 + "vw";
-      el.style.animationDuration = speedMin + Math.random() * speedMax + "s";
-      el.style.fontSize = (sizeMin + Math.random() * sizeMax) + "px";
-      bg.appendChild(el);
-    }
-  }
-
-  // 🎀 30 srdíček
-  spawn("heart", "💗", 30, 20, 40, 3, 5);
-
-  // ✨ 40 třpytek
-  spawn("sparkle", "✨", 40, 10, 20, 3, 4);
-
-  // ⭐ 20 hvězdiček
-  spawn("star", "⭐", 20, 20, 35, 4, 6);
-</script>
-
-<div class="full-bg"></div>
