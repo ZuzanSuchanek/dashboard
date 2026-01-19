@@ -55,7 +55,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    color: #000;
+    color: var( --text-color);
 }
 
 .todo-widget ul {
@@ -66,6 +66,7 @@
 
 .todo-item-content span {
     font-size: 16px;
+    color: var( --text-color);
 }
 
 .completed span {
@@ -76,8 +77,8 @@
 .todo-widget button {
     cursor: pointer;
     padding: 500px 500px;
-    background: #ff4b4b;
-    color: white;
+    background: var(--body-bg);
+    color: var( --text-color);
     border: none;
     border-radius: 6px;
     transition: 0.2s;
@@ -99,7 +100,8 @@
     box-shadow: 0 2px 6px rgba(242, 64, 227, 0.25);
     margin-bottom: 8px;
     justify-content: space-between;
-    background: white;
+    background: var(--body-bg);
+    color: var( --text-color);
 }
 
 .input-group {

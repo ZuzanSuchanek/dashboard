@@ -22,13 +22,13 @@
 <style>
 /* === MOOD TRACKER (scoped, index-safe) === */
 .mood-widget {
-  background: #151821;
+  background: var(--body-bg);
   border: 1px solid #222635;
   border-radius: 12px;
   padding: 16px;
   width: 100%;
   max-width: 320px;
-  color: #e5e7eb;
+  color: var( --text-color);
   font-family: inherit;
 }
 
@@ -60,9 +60,9 @@
   width: 100%;
   margin-bottom: 10px;
   padding: 6px;
-  background: #0f1115;
+  background: var(--body-bg);
   border: 1px solid #222635;
-  color: #e5e7eb;
+  color: var( --text-color);
   border-radius: 6px;
   cursor: pointer;
 }
@@ -73,8 +73,8 @@
 }
 
 .mood-widget input[type="date"] {
-  background: #0f1115;
-  color: #e5e7eb;
+  background: var(--body-bg);
+  color: var( --text-color);
   border: 1px solid #222635;
   border-radius: 6px;
   padding: 5px;

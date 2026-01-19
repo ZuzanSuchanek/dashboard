@@ -48,7 +48,7 @@ window.calcClear = function() {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
-    background: #f5f5f5;
+    background: var(--body-bg);
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #ccc;
@@ -61,8 +61,9 @@ window.calcClear = function() {
     padding: 10px;
     font-size: 18px;
     border: 1px solid #aaa;
-    background: white;
+    background: var(--body-bg);
     outline: none;
+    color: var( --text-color);
 }
 
 /* Všechna tlačítka */
@@ -73,6 +74,7 @@ button {
     border: 1px solid #aaa;
     cursor: pointer;
     background-size: 100% 100%;
+    color: var( --text-color);
      background-image:url(https://i.redd.it/jeff-the-killer-creepypasta-has-a-legitimately-creepy-v0-86t77n481gsc1.jpg?width=1026&format=pjpg&auto=webp&s=32dcd7fafe1348e47772c83e4e5f64106c482883);
 }
 
@@ -85,7 +87,7 @@ button:hover {
 /* Tlačítko C přes celou šířku */
 .clear {
     grid-column: span 4;
-    background: white;
+    background: var(--body-bg);
     font-weight: bold;
 }
 </style>
